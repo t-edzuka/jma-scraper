@@ -1,0 +1,78 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jma-scraper"
+description = ''
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+    { name = "t-edzuka", email = "t.edzuka@happy-quality.jp" },
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+    "pydantic>=1.10.4",
+    "beautifulsoup4>=4.11.1",
+    "pandas>=1.5.2",
+    "lxml >= 4.9.2",
+    "httpx >= 0.23.3",
+    "sqlmodel",
+    "python-ulid",
+    "python-dotenv>=0.21.0",
+    "boto3",
+    "loguru"
+]
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "jma_scraper/__about__.py"
+
+[tool.ruff]
+line-length = 88
+extend-select = ["Q"]
+flake8-quotes = { inline-quotes = "double", multiline-quotes = "double" }
+# FastAPI を参考に
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "C", # flake8-comprehensions
+    "B", # flake8-bugbear
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+
+[tool.black]
+color = true
+line-length = 88
+target-version = ["py310", "py311"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+follow_imports = "normal"
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["scripts", "jma_scraper"]
+testpaths = ["tests", "jma_scraper"]
+addopts = ["--doctest-modules"]

@@ -1,0 +1,7 @@
+black
+isort[colors]
+mypy
+ruff
+pycodestyle
+boto3-stubs[s3]
+types-beautifulsoup4
