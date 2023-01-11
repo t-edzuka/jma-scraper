@@ -1,4 +1,3 @@
-from datetime import date
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -20,7 +19,9 @@ class R2Conf(BaseSettings):
     AWS_ACCESS_KEY_ID: str = Field(..., regex=r"^[a-fA-F0-9]{32}$")
     AWS_ACCESS_KEY_SECRET: str = Field(..., regex=r"^[a-fA-F0-9]{64}$")
 
-    BUCKET_NAME: str = Field("00-hq", regex=r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+    BUCKET_NAME: str = Field(..., regex=r"^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                             description="バケット名を指定記号で始まるの禁止, アンダースコア禁止などいくつか注意点あり"
+                             )
 
     class Config:
         env_file = str(Path(__file__).parents[2] / ".env")
