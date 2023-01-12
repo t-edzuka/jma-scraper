@@ -1,7 +1,8 @@
 from datetime import date
 
-from core.location_spec import HAMAMATSU
-from core.url_formatter import QueryParamsForJma, RecordInterval
+from core.location_spec import RecordInterval
+from core.location_instances import HAMAMATSU
+from core.url_formatter import QueryParamsForJma
 
 
 def test_location_hamamatsu_spec():

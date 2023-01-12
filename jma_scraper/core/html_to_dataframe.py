@@ -2,6 +2,9 @@ from typing import Any, List, Protocol, Sequence, TypeAlias
 
 import pandas as pd
 from bs4 import BeautifulSoup
+from core.repository import Fetcher
+from core.url_formatter import QueryParamsForJma
+from infrastracture.http_client import fetch_html
 from pandas import MultiIndex
 
 HTML_TABLE_ID_SPEC = "tablefix1"  # 気象庁ホームページの仕様で tableタグにこのidが付与されているところが観測データのBody
@@ -70,3 +73,17 @@ def format_columns(
         )
     flattened_df.columns = after_columns
     return flattened_df
+
+
+def fetch_df(
+    qp: QueryParamsForJma,
+    after_columns: Sequence[str],
+    fetcher: Fetcher = fetch_html,
+    time_out_sec: float = 2.0,
+) -> FormattedDf:
+    html_txt = fetcher(qp, time_out_sec=time_out_sec)
+    html_table_only = pluck_table_from_html(html_txt)
+    df = read_html_table(html_table_only, pd.read_html)
+    df = flatten_columns(df)
+    df = format_columns(df, after_columns=after_columns)
+    return df

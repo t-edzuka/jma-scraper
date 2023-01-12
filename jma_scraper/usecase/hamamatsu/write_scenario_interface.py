@@ -10,11 +10,12 @@ from jma_scraper.core.html_to_dataframe import (
     pluck_table_from_html,
     read_html_table,
 )
-from jma_scraper.core.location_spec import HAMAMATSU
-from jma_scraper.core.repository import Fetcher, Writer
-from jma_scraper.core.url_formatter import QueryParamsForJma, RecordInterval
-from jma_scraper.infrastracture.db_tables import FetchedHtml, FetchFailed
-from jma_scraper.usecase.hamamatsu.hamamatsu_every_10_minutes import HAMAMATSU_COLUMNS
+
+from ...core.location_instances import HAMAMATSU, HAMAMATSU_10Minutes_COLUMNS
+from ...core.location_spec import RecordInterval
+from ...core.repository import Fetcher, Writer
+from ...core.url_formatter import QueryParamsForJma
+from ...infrastracture.db_tables import FetchedHtml, FetchFailed
 
 
 def fetch_and_write_hamamatsu_10_minutes_table(
@@ -29,7 +30,7 @@ def fetch_and_write_hamamatsu_10_minutes_table(
     q_jma = QueryParamsForJma(
         date=target_date,
         prefecture_no=HAMAMATSU.prefecture_no,
-        block_no=HAMAMATSU.block_no,
+        block_no=HAMAMATSU.location_no,
         record_interval=RecordInterval.from_literal("every_10_minutes"),
     )
 
@@ -48,8 +49,9 @@ def fetch_and_write_hamamatsu_10_minutes_table(
 
     df: pd.DataFrame = read_html_table(html_table, pd.read_html)
     df = flatten_columns(df)
-    assert list(df.columns) == HAMAMATSU_COLUMNS.original_columns
-    df = format_columns(df, HAMAMATSU_COLUMNS.after_columns)
-    assert list(df.columns) == HAMAMATSU_COLUMNS.after_columns
+    assert list(df.columns) == HAMAMATSU_10Minutes_COLUMNS.original_columns
+    df = format_columns(df, HAMAMATSU_10Minutes_COLUMNS.after_columns)
+    assert list(df.columns) == HAMAMATSU_10Minutes_COLUMNS.after_columns
 
     writer.write(df, dst=dst)
+    session.close()

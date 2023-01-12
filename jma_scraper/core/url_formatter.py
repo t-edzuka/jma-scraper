@@ -1,55 +1,10 @@
 from datetime import date
-from enum import StrEnum
-from typing import ClassVar, Dict, List, Literal, Union
+from typing import ClassVar, Dict, List, Union
 from urllib.parse import parse_qs, urlparse
 
 from pydantic import BaseModel, Field, HttpUrl, PastDate
 
-EVERY_XX = (
-    "every_10_minutes",
-    "every_1_hour",
-    "every_1_days",
-    "every_5_days",
-    "every_10_days",
-)
-TYPE_EVERY_XX = Literal[
-    "every_10_minutes",
-    "every_1_hour",
-    "every_1_days",
-    "every_5_days",
-    "every_10_days",
-]
-
-
-class RecordInterval(StrEnum):
-    """気象庁URLページの観測データのAggregation間隔に応じたURL値"""
-
-    ten_minutes = "10min_s1"
-    one_hour = "hourly_s1"
-
-    one_day = "daily_s1"
-    five_day_divide_for_each_month = (
-        "mb5daily_s1"  # A period of each month divided from one to every five days.
-    )
-    ten_day_divide_for_each_mont = (
-        "10daily_s1"  # 1-10日, 11-20日, 21-31日のように月を頭から10日ごとに区切った
-    )
-
-    @classmethod
-    def _name_mappings(cls) -> Dict[str, "RecordInterval"]:
-        list_values: List["RecordInterval"] = list(cls)
-        return {
-            human_readable: enum_value
-            for enum_value, human_readable in zip(list_values, EVERY_XX)  # noqa
-        }
-
-    @classmethod
-    def from_literal(cls, every_xxx: TYPE_EVERY_XX) -> "RecordInterval":
-        """
-        >>> RecordInterval.from_literal("every_10_minutes")
-        <RecordInterval.ten_minutes: '10min_s1'>
-        """
-        return cls._name_mappings()[every_xxx]
+from jma_scraper.core.location_spec import Location, LocationColumnType, RecordInterval
 
 
 class QueryParamsForJma(BaseModel):
@@ -78,10 +33,26 @@ class QueryParamsForJma(BaseModel):
         RecordInterval.ten_minutes, description="データ観測のaggregation単位を選ぶ"
     )
 
+    location_col_type: LocationColumnType = Field(
+        default=LocationColumnType.main, description="観測地点によってカラム名が変わる"
+    )
+
+    @classmethod
+    def from_location_spec(
+        cls, location: Location, past_date: PastDate, record_interval: RecordInterval
+    ) -> "QueryParamsForJma":
+        return cls(
+            date=past_date,
+            prefecture_no=location.prefecture_no,
+            block_no=location.location_no,
+            record_interval=record_interval,
+            location_col_type=location.col_type,
+        )
+
     @property
     def query_url(self) -> HttpUrl:
         return HttpUrl(
-            f"{self.JMA_WEBSITE_URL}/{self.record_interval}.php?prec_no={self.prefecture_no}&block_no={self.block_no}&year={self.date.year}&month={self.date.month}&day={self.date.day}",
+            f"{self.JMA_WEBSITE_URL}/{self.record_interval.with_location_col_type(self.location_col_type)}.php?prec_no={self.prefecture_no}&block_no={self.block_no}&year={self.date.year}&month={self.date.month}&day={self.date.day}",
             scheme="https",
         )
 
@@ -152,9 +123,9 @@ class QueryParamsForJma(BaseModel):
         >>> input_url = "https://www.data.jma.go.jp/obd/stats/etrn/view/10min_s1.php?prec_no=50&block_no=47654&year=2017&month=1&day=1"
         >>> result = QueryParamsForJma.get_record_interval_from_url(input_url)
         >>> result
-        '10min_s1'
+        '10min'
         >>> assert result == RecordInterval.ten_minutes
         """
         parsed_url = urlparse(url)
         path = parsed_url.path
-        return path.split("/")[-1].split(".")[0]
+        return path.split("/")[-1].split(".")[0].split("_")[0]

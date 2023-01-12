@@ -11,3 +11,4 @@ def test_html_txt_can_convert_to_dataframe(hamamatsu_html):
     df = read_html_table(html_table_txt, pd.read_html)
     assert type(df) == pd.DataFrame
     assert isinstance(df.columns, pd.MultiIndex)
+

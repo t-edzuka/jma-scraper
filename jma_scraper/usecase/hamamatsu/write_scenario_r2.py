@@ -1,22 +1,21 @@
-import sys
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 from typing import Union
 
 from botocore.exceptions import EndpointConnectionError
+from core.location_instances import HAMAMATSU
 from pydantic import HttpUrl, validate_arguments
 from sqlmodel import Session, create_engine
 
-from jma_scraper.core.location_spec import HAMAMATSU
 from jma_scraper.core.repository import WriterSrcValues
 from jma_scraper.infrastracture.db_tables import R2UploadFailed, R2UploadSucceeded
 from jma_scraper.infrastracture.localfile import JMA_CSV_DIR, RESOURCE_ROOT
 from jma_scraper.infrastracture.r2 import LocalToR2Writer, R2Conf
 from jma_scraper.infrastracture.sqlite_starter import (
+    DB_PATH,
     create_db_and_tables,
     create_session,
     create_sql_url,
-    DB_PATH
 )
 
 
@@ -56,7 +55,7 @@ def write_from_local_to_r2(
 
 
 @validate_arguments
-def main(date_: date, src_csv_file: str):
+def main(date_: date, src_csv_file: str) -> None:
     sqlite_url = create_sql_url(DB_PATH)
     engine = create_engine(sqlite_url, echo=True)
     create_db_and_tables(engine)

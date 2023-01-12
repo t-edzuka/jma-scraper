@@ -1,9 +1,9 @@
 from datetime import date
 from pathlib import Path
 
+from core.location_instances import HAMAMATSU
 from sqlmodel import Session
 
-from jma_scraper.core.location_spec import HAMAMATSU
 from jma_scraper.core.repository import WriterSrcValues
 from jma_scraper.infrastracture.db_tables import LocalFileSaved
 from jma_scraper.infrastracture.http_client import fetch_html

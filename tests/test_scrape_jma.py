@@ -4,7 +4,8 @@ from datetime import date
 import pytest
 from bs4 import BeautifulSoup
 
-from jma_scraper.core.url_formatter import QueryParamsForJma, RecordInterval
+from jma_scraper.core.url_formatter import QueryParamsForJma
+from core.location_spec import RecordInterval
 
 
 def test_table_tag_has_id_called_tablefix1(hamamatsu_html):

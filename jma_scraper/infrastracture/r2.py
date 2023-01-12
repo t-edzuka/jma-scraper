@@ -19,9 +19,11 @@ class R2Conf(BaseSettings):
     AWS_ACCESS_KEY_ID: str = Field(..., regex=r"^[a-fA-F0-9]{32}$")
     AWS_ACCESS_KEY_SECRET: str = Field(..., regex=r"^[a-fA-F0-9]{64}$")
 
-    BUCKET_NAME: str = Field(..., regex=r"^[a-z0-9]+(?:-[a-z0-9]+)*$",
-                             description="バケット名を指定記号で始まるの禁止, アンダースコア禁止などいくつか注意点あり"
-                             )
+    BUCKET_NAME: str = Field(
+        ...,
+        regex=r"^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        description="バケット名を指定記号で始まるの禁止, アンダースコア禁止などいくつか注意点あり",
+    )
 
     class Config:
         env_file = str(Path(__file__).parents[2] / ".env")
@@ -57,9 +59,9 @@ class R2Conf(BaseSettings):
 
 class LocalToR2Writer(Writer):
     def __init__(
-            self,
-            src_values: WriterSrcValues,
-            r2_conf: R2Conf,
+        self,
+        src_values: WriterSrcValues,
+        r2_conf: R2Conf,
     ):
         super().__init__(src_values)
         self.r2_conf = r2_conf

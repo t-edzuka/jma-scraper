@@ -3,9 +3,10 @@ from abc import ABC
 from datetime import date
 from typing import Any, Protocol, runtime_checkable
 
+from core.location_spec import TYPE_EVERY_XX
 from pydantic import BaseModel, Field
 
-from jma_scraper.core.url_formatter import TYPE_EVERY_XX, QueryParamsForJma
+from jma_scraper.core.url_formatter import QueryParamsForJma
 
 
 class WriterSrcValues(BaseModel):

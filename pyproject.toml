@@ -28,7 +28,8 @@ dependencies = [
     "python-ulid",
     "python-dotenv>=0.21.0",
     "boto3",
-    "loguru"
+    "loguru",
+    "typer[all]"
 ]
 dynamic = ["version"]
 

@@ -1,8 +1,9 @@
-from datetime import date
+from typing import Union
 
 import httpx
+from pydantic import HttpUrl
 
-from jma_scraper.core.url_formatter import QueryParamsForJma, RecordInterval
+from jma_scraper.core.url_formatter import QueryParamsForJma
 
 
 def fetch_html(query_param: QueryParamsForJma, time_out_sec: float = 2.0) -> str:
@@ -21,3 +22,8 @@ def fetch_html(query_param: QueryParamsForJma, time_out_sec: float = 2.0) -> str
         raise ValueError(f"The content type should be text/html, got {content_type}")
 
     return response.text
+
+
+def fetch_html_from_url(url: Union[str, HttpUrl], time_out_sec: float = 2.0) -> str:
+    qp = QueryParamsForJma.from_url(url)
+    return fetch_html(qp, time_out_sec=time_out_sec)

@@ -1,10 +1,9 @@
-import pandas as pd
 from pandas import MultiIndex, Index
 
 from jma_scraper.core.html_to_dataframe import pluck_table_from_html, read_html_table, flatten_columns, format_columns
-from jma_scraper.usecase.hamamatsu.hamamatsu_every_10_minutes import HAMAMATSU_COLUMNS
+from jma_scraper.core.location_instances import HAMAMATSU_10Minutes_COLUMNS
 
-original, after = HAMAMATSU_COLUMNS.original_columns, HAMAMATSU_COLUMNS.after_columns
+original, after = HAMAMATSU_10Minutes_COLUMNS.original_columns, HAMAMATSU_10Minutes_COLUMNS.after_columns
 
 
 def test_pluck_table_from_html(hamamatsu_html):
@@ -25,5 +24,3 @@ def test_pluck_table_from_html(hamamatsu_html):
 
     # NOTE: format_columns cause SIDE EFFECT which mutate original df_flattened
     assert list(df_flattened.columns) == after
-
-
