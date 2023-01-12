@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from infrastracture.localfile import RESOURCE_ROOT
+from jma_scraper.infrastracture.localfile import RESOURCE_ROOT
 from pydantic import Field, validate_arguments
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine

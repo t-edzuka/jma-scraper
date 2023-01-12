@@ -1,6 +1,6 @@
 from datetime import date
 
-from infrastracture.http_client import fetch_html
+from jma_scraper.infrastracture.http_client import fetch_html
 
 from jma_scraper.core.html_to_dataframe import (
     flatten_columns,

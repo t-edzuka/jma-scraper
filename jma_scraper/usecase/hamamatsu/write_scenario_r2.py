@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Union
 
 from botocore.exceptions import EndpointConnectionError
-from core.location_instances import HAMAMATSU
+from jma_scraper.core.location_instances import HAMAMATSU
 from pydantic import HttpUrl, validate_arguments
 from sqlmodel import Session, create_engine
 
@@ -56,7 +56,7 @@ def write_from_local_to_r2(
 
 @validate_arguments
 def main(date_: date, src_csv_file: str) -> None:
-    sqlite_url = create_sql_url(DB_PATH)
+    sqlite_url = create_sql_url(str(DB_PATH))
     engine = create_engine(sqlite_url, echo=True)
     create_db_and_tables(engine)
 

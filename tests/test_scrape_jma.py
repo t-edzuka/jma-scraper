@@ -1,9 +1,10 @@
 # from pydantic.dataclasses import dataclass
 from datetime import date
 
+import bs4.element
 import pytest
-from bs4 import BeautifulSoup
-from core.location_spec import RecordInterval
+from bs4 import BeautifulSoup, NavigableString
+from jma_scraper.core.location_spec import RecordInterval
 
 from jma_scraper.core.url_formatter import QueryParamsForJma
 
@@ -16,7 +17,7 @@ def test_bs4_can_extract_tablefix1_contents(hamamatsu_html):
     soup = BeautifulSoup(hamamatsu_html, features="html.parser")
     table_content = soup.find(id="tablefix1")
     assert table_content is not None
-
+    assert isinstance(table_content, bs4.element.Tag)
     first_row = table_content.find_all("tr")[2]
     first_cells = first_row.find_all("td")
     assert len(first_cells) == 11

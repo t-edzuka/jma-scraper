@@ -25,8 +25,9 @@ install:
 
 uninstall:
     @echo "Uninstalling using this pip $(which pip)"
-    @echo "Uninstalling following...:\n $(pip freeze)"
-    -pip freeze > "tmp.txt" && pip uninstall -y -r "tmp.txt" && rm "tmp.txt"
+    @echo "Uninstalling following...:\n$(pip freeze)"
+    -pip freeze > "tmp.txt" && pip uninstall -y -r "tmp.txt"
+    @rm "tmp.txt"
 
 # Clean initialization of dev enviroment
 init:

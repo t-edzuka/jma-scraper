@@ -1,7 +1,7 @@
 from datetime import date
 from pathlib import Path
 
-from core.location_instances import HAMAMATSU
+from jma_scraper.core.location_instances import HAMAMATSU
 from sqlmodel import Session
 
 from jma_scraper.core.repository import WriterSrcValues

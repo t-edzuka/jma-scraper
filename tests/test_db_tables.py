@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from pydantic import HttpUrl
 from pytest import fixture
 from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
@@ -10,9 +11,9 @@ from jma_scraper.infrastracture.db_tables import FetchedHtml
 @fixture
 def html_table_example() -> str:
     text_path = (
-        Path(__file__).parent
-        / "input_examples"
-        / "hamamatsu_every_10min_only_table.html"
+            Path(__file__).parent
+            / "input_examples"
+            / "hamamatsu_every_10min_only_table.html"
     )
     return text_path.read_text()
 
@@ -32,7 +33,7 @@ def in_memory_session():
 
 def test_fetched_html_tables(html_table_example):
     table_content = FetchedHtml(
-        url="https://example.com",  # type: ignore
+        url="https://example.com",
         html_content=html_table_example,
     )
 
@@ -43,8 +44,9 @@ def test_fetched_html_tables(html_table_example):
 
 def test_fetched_html_recorded_to_sqlite_table(session, html_table_example):
     with session:
+        url = "https://example.com"
         data = FetchedHtml(
-            url="https://example.com",  # type:ignore
+            url=url,
             html_content=html_table_example,
         )
         session.add(data)
