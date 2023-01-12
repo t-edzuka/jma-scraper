@@ -43,7 +43,6 @@ https://www.data.jma.go.jp/obd/stats/etrn/view/10min_s1.php?prec_no=50&block_no=
 
 ### コマンドラインで取得してCSV出力する例を作成した
 
-
 ```shell
 python main.py --help
 ```
@@ -65,6 +64,11 @@ python main.py --help
 ╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
+### 実行例
+
+```shell
+python main.py --date 2023-01-01 --location-name hamamatsu
+```
 
 ```text
 浜松-hamamatsu
