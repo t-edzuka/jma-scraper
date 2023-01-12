@@ -58,15 +58,25 @@ class QueryParamsForJma(BaseModel):
 
     @classmethod
     def from_url(cls, url: Union[str, HttpUrl]) -> "QueryParamsForJma":
+        """
+        >>> input_url = "https://www.data.jma.go.jp/obd/stats/etrn/view/10min_s1.php?prec_no=50&block_no=47654&year=2017&month=1&day=1"
+        >>> QueryParamsForJma.from_url(input_url)
+        QueryParamsForJma(date=datetime.date(2017, 1, 1), prefecture_no=50, block_no=47654, record_interval=<RecordInterval.ten_minutes: '10min'>, location_col_type=<LocationColumnType.main: 's1'>)
+        >>> iwata_url = "https://www.data.jma.go.jp/obd/stats/etrn/view/10min_a1.php?prec_no=50&block_no=1244&year=2023&month=1&day=1"
+        >>> QueryParamsForJma.from_url(iwata_url)
+        QueryParamsForJma(date=datetime.date(2023, 1, 1), prefecture_no=50, block_no=1244, record_interval=<RecordInterval.ten_minutes: '10min'>, location_col_type=<LocationColumnType.few: 'a1'>)
+        """
         date_ = cls.get_date_from_url(url)
         prefecture_no = cls.get_prefecture_no_from_url(url)
         block_url = cls.get_block_no_from_url(url)
         rec_interval = cls.get_record_interval_from_url(url)
+        col_type: LocationColumnType = cls.get_columns_type(url)
         return cls(
             date=date_,
             prefecture_no=prefecture_no,
             block_no=block_url,
             record_interval=RecordInterval(rec_interval),
+            location_col_type=col_type,
         )
 
     @staticmethod
@@ -129,3 +139,21 @@ class QueryParamsForJma(BaseModel):
         parsed_url = urlparse(url)
         path = parsed_url.path
         return path.split("/")[-1].split(".")[0].split("_")[0]
+
+    @staticmethod
+    def get_columns_type(url: str) -> LocationColumnType:
+        """
+        観測地点に依存した観測データ結果テーブルの列名のタイプ: s1 or a1 ...
+        >>> iwata_url = "https://www.data.jma.go.jp/obd/stats/etrn/view/10min_s1.php?prec_no=50&block_no=47654&year=2017&month=1&day=1"
+        >>> QueryParamsForJma.get_columns_type(iwata_url)
+        's1'
+        """
+        parsed_url = urlparse(url)
+        path = parsed_url.path
+        result = path.split("/")[-1].split(".")[0].split("_")[1]
+
+        if result not in set(LocationColumnType):
+            raise ValueError(
+                f"Column type should be in the one of {list(LocationColumnType)}, but got: {result}"
+            )
+        return result  # type: ignore
