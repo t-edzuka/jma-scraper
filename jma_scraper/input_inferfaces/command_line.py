@@ -4,7 +4,7 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Dict, Literal, Optional
 
-from core.location_spec import RecordInterval
+from jma_scraper.core.location_spec import RecordInterval
 from pydantic import validate_arguments
 from typer import Option
 
@@ -22,14 +22,14 @@ from jma_scraper.core.url_formatter import QueryParamsForJma
 from jma_scraper.infrastracture.http_client import fetch_html
 
 LOCATION_OK = Literal["hamamatsu", "iwata", "shizuoka"]
-location_mapping: Dict[LOCATION_OK, Location] = {
+LOCATION_MAPPING: Dict[LOCATION_OK, Location] = {
     "hamamatsu": HAMAMATSU,
     "iwata": IWATA,
     "shizuoka": SHIZUOKA,
 }
 
 EVERY = Literal["10m"]
-interval_mappings = {"10m": RecordInterval.ten_minutes}
+INTERVAL_MAPPINGS = {"10m": RecordInterval.ten_minutes}
 
 LocationAndInterval = Literal["hamamatsu 10m", "iwata 10m", "shizuoka 10m"]
 
@@ -72,16 +72,18 @@ def to_csv(
     dst_path: Optional[Path] = None,
 ) -> None:
     date_ = is_string_past_date(date_str)
-    if location_name != HAMAMATSU.en_name:
-        raise ValueError(f"location_name must be in {LOCATION_OK}")
+    if location_name not in LOCATION_MAPPING:
+        raise ValueError(f"location_name must be from one of {LOCATION_MAPPING.keys()}")
 
-    location: Location = location_mapping[location_name]
+    location: Location = LOCATION_MAPPING[location_name]
+    print(f"{location.name}-{location.en_name}")
 
     qp = QueryParamsForJma(
         date=date_,
         block_no=location.location_no,
         prefecture_no=location.prefecture_no,
-        record_interval=interval_mappings[every],
+        record_interval=INTERVAL_MAPPINGS[every],
+        location_col_type=location.col_type
     )
     url = qp.query_url
     print(f"Fetching this url: {url}")
@@ -105,20 +107,20 @@ def to_csv(
 
 
 def to_csv_with_typer(
-    date: str = Option(..., help="過去のデータの日付: 2023-01-01"),
+    date: str = Option(..., help="過去のデータの日付, 例: 2023-01-01"),
     dst_path: Optional[Path] = Option(
         None, help="保存するファイルパス", dir_okay=True, resolve_path=True
     ),
     location_name: str = Option(
         default="hamamatsu",
-        help="""
-                      allowed input: ["hamamatsu", ]
+        help=f"""
+                      allowed input: {list(LOCATION_MAPPING.keys())}
                       """,
     ),
     every: str = Option(
         default="10m",
-        help="""データの取得間隔
-                      allowed input: ["10m"]
+        help=f"""データの取得間隔
+                      allowed input: {list(INTERVAL_MAPPINGS.keys())}
                       """,
     ),
     save_local: bool = Option(
