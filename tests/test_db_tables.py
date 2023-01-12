@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from pydantic import HttpUrl
 from pytest import fixture
 from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
@@ -11,9 +10,9 @@ from jma_scraper.infrastracture.db_tables import FetchedHtml
 @fixture
 def html_table_example() -> str:
     text_path = (
-            Path(__file__).parent
-            / "input_examples"
-            / "hamamatsu_every_10min_only_table.html"
+        Path(__file__).parent
+        / "input_examples"
+        / "hamamatsu_every_10min_only_table.html"
     )
     return text_path.read_text()
 

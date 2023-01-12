@@ -3,10 +3,10 @@ from pathlib import Path
 from typing import Union
 
 from botocore.exceptions import EndpointConnectionError
-from jma_scraper.core.location_instances import HAMAMATSU
 from pydantic import HttpUrl, validate_arguments
 from sqlmodel import Session, create_engine
 
+from jma_scraper.core.location_instances import HAMAMATSU
 from jma_scraper.core.repository import WriterSrcValues
 from jma_scraper.infrastracture.db_tables import R2UploadFailed, R2UploadSucceeded
 from jma_scraper.infrastracture.localfile import JMA_CSV_DIR, RESOURCE_ROOT

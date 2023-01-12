@@ -1,4 +1,5 @@
 import pandas as pd
+
 from jma_scraper.core.html_to_dataframe import fetch_df
 from jma_scraper.core.location_instances import HAMAMATSU_10Minutes_COLUMNS
 from jma_scraper.infrastracture.http_client import fetch_html

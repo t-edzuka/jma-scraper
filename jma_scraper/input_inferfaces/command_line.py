@@ -52,7 +52,9 @@ def is_string_past_date(date_string: str) -> date:
     try:
         date_ = datetime.strptime(date_string, "%Y-%m-%d")
     except ValueError as e:
-        raise ValueError(f"存在しない日付か, 形式が間違ってます('YYYY-mm-dd [2021-01-01など]'を入力してください). Got: {date_string}") from e
+        raise ValueError(
+            f"存在しない日付か, 形式が間違ってます('YYYY-mm-dd [2021-01-01など]'を入力してください). Got: {date_string}"
+        ) from e
 
     now = datetime.now()
     is_past = date_ < now

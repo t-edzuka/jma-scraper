@@ -3,8 +3,9 @@ from pathlib import Path
 
 import pandas as pd
 from _pytest.fixtures import fixture
+
 from jma_scraper.core.html_to_dataframe import pluck_table_from_html, read_html_table
-from jma_scraper.core.location_instances import HAMAMATSU, IWATA
+from jma_scraper.core.location_instances import HAMAMATSU
 from jma_scraper.core.location_spec import RecordInterval
 from jma_scraper.core.url_formatter import QueryParamsForJma
 

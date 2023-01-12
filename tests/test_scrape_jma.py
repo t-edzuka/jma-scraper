@@ -3,9 +3,9 @@ from datetime import date
 
 import bs4.element
 import pytest
-from bs4 import BeautifulSoup, NavigableString
-from jma_scraper.core.location_spec import RecordInterval
+from bs4 import BeautifulSoup
 
+from jma_scraper.core.location_spec import RecordInterval
 from jma_scraper.core.url_formatter import QueryParamsForJma
 
 

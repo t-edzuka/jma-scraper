@@ -1,9 +1,10 @@
 from typing import Annotated
 
-from jma_scraper.infrastracture.localfile import RESOURCE_ROOT
 from pydantic import Field, validate_arguments
 from sqlalchemy.engine import Engine
 from sqlmodel import Session, SQLModel, create_engine
+
+from jma_scraper.infrastracture.localfile import RESOURCE_ROOT
 
 DB_FILE_DIR = RESOURCE_ROOT / "jma_db"
 DB_FILE_DIR.mkdir(exist_ok=True)

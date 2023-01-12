@@ -1,7 +1,5 @@
 from datetime import date
 
-from jma_scraper.infrastracture.http_client import fetch_html
-
 from jma_scraper.core.html_to_dataframe import (
     flatten_columns,
     format_columns,
@@ -15,6 +13,7 @@ from jma_scraper.core.location_spec import (
     RecordInterval,
 )
 from jma_scraper.core.url_formatter import QueryParamsForJma
+from jma_scraper.infrastracture.http_client import fetch_html
 
 
 def test_iwata():
