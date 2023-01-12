@@ -4,7 +4,6 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Dict, Literal, Optional
 
-from pydantic import validate_arguments
 from typer import Option
 
 from jma_scraper.core.html_to_dataframe import fetch_df
@@ -52,9 +51,7 @@ def is_string_past_date(date_string: str) -> date:
     try:
         date_ = datetime.strptime(date_string, "%Y-%m-%d")
     except ValueError as e:
-        raise ValueError(
-            f"存在しない日付か, 形式が間違ってます('YYYY-mm-dd [2021-01-01など]'を入力してください). Got: {date_string}"
-        ) from e
+        raise ValueError(f"存在しない日付です Got: {date_string}") from e
 
     now = datetime.now()
     is_past = date_ < now
@@ -63,7 +60,18 @@ def is_string_past_date(date_string: str) -> date:
     return date_
 
 
-@validate_arguments
+def check_location_name(location_name: str) -> None:
+    if location_name not in LOCATION_MAPPING:
+        raise ValueError(
+            f"location_name must be one of {list(LOCATION_MAPPING.keys())}"
+        )
+
+
+def check_input_interval_arg(every: str) -> None:
+    if every not in INTERVAL_MAPPINGS:
+        raise ValueError(f"Allowed input is one of {list(INTERVAL_MAPPINGS.keys())}")
+
+
 def to_csv(
     date_str: str,
     location_name: LOCATION_OK,
@@ -72,9 +80,10 @@ def to_csv(
     save_local: bool,
     dst_path: Optional[Path] = None,
 ) -> None:
+    # -- 事前条件
     date_ = is_string_past_date(date_str)
-    if location_name not in LOCATION_MAPPING:
-        raise ValueError(f"location_name must be from one of {LOCATION_MAPPING.keys()}")
+    check_location_name(location_name)
+    check_input_interval_arg(every)
 
     location: Location = LOCATION_MAPPING[location_name]
     print(f"{location.name}-{location.en_name}")
@@ -102,9 +111,22 @@ def to_csv(
         df.to_csv(dst_path, index=False)
         return
 
-    dst_path = Path(f"{date_str}_{location_name}__every_{every}.csv")
+    dst_path = create_dst_csv_path(
+        date_str=date_str, location_name=location_name, every=every
+    )
     print(f"Save to {dst_path.resolve()}")
     df.to_csv(dst_path, index=False)
+
+
+def create_dst_csv_path(
+    date_str: str, location_name: LOCATION_OK, every: EVERY
+) -> Path:
+    """
+    >>> dst_path = create_dst_csv_path(date_str="2021-01-01", location_name="hamamatsu", every="10m")
+    >>> str(dst_path)
+    '2021-01-01_hamamatsu__every_10m.csv'
+    """
+    return Path(f"{date_str}_{location_name}__every_{every}.csv")
 
 
 def to_csv_with_typer(
@@ -128,8 +150,7 @@ def to_csv_with_typer(
         default=False,
         help="""ローカルに保存するかどうか.
                       dst_pathを指定しなかった場合: "{YYYY-mm-dd}__{location_name}__every_{every}.csv"
-                       YYYY-mm-dd はdateで指定した引数
-                      という名前でカレントディレクトリに保存する.
+                      という形式でカレントディレクトリに保存する.
                       """,
     ),
     echo: bool = Option(default=True, help="標準出力に出力するかどうか"),
