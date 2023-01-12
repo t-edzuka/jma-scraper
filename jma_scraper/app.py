@@ -63,5 +63,4 @@ def retry_failed_fetch(session: Session) -> None:
 
 if __name__ == "__main__":
     retry_failed_fetch(session=session)
-
-    # hamamatsu_10minutes_save_as_csv()
+    hamamatsu_10minutes_save_as_csv()

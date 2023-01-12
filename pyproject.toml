@@ -57,7 +57,7 @@ ignore = [
 [tool.black]
 color = true
 line-length = 88
-target-version = ["py310", "py311"]
+target-version = ["py311"]
 
 [tool.isort]
 profile = "black"
@@ -93,5 +93,3 @@ disallow_untyped_defs = false
 pythonpath = ["scripts", "jma_scraper"]
 testpaths = ["tests", "jma_scraper"]
 addopts = ["--doctest-modules"]
-
-

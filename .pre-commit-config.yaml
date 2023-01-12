@@ -43,10 +43,23 @@ repos:
     hooks:
       - id: black
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.991
+  # pytest
+  - repo: local
     hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest -s -v
+        language: system
+        pass_filenames: false
+        always_run: true
+
       - id: mypy
+        name: mypy-local
+        entry: mypy jma_scraper
+        args: [ "--ignore-missing-imports"]
+        language: system
+        pass_filenames: false
+
 ci:
   autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
   autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate
