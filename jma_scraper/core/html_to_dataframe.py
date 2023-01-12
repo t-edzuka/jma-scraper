@@ -2,9 +2,9 @@ from typing import Any, List, Protocol, Sequence, TypeAlias
 
 import pandas as pd
 from bs4 import BeautifulSoup
-from core.repository import Fetcher
-from core.url_formatter import QueryParamsForJma
-from infrastracture.http_client import fetch_html
+from jma_scraper.core.repository import Fetcher
+from jma_scraper.core.url_formatter import QueryParamsForJma
+from jma_scraper.infrastracture.http_client import fetch_html
 from pandas import MultiIndex
 
 HTML_TABLE_ID_SPEC = "tablefix1"  # 気象庁ホームページの仕様で tableタグにこのidが付与されているところが観測データのBody
