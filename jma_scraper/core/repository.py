@@ -3,9 +3,9 @@ from abc import ABC
 from datetime import date
 from typing import Any, Protocol, runtime_checkable
 
-from jma_scraper.core.location_spec import TYPE_EVERY_XX
 from pydantic import BaseModel, Field
 
+from jma_scraper.core.location_spec import TYPE_EVERY_XX
 from jma_scraper.core.url_formatter import QueryParamsForJma
 
 

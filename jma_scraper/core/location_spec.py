@@ -145,7 +145,7 @@ class RecordInterval(StrEnum):
     def from_literal(cls, every_xxx: "TYPE_EVERY_XX") -> "RecordInterval":
         """
         >>> RecordInterval.from_literal("every_10_minutes")
-        <RecordInterval.ten_minutes: '10min_'>
+        <RecordInterval.ten_minutes: '10min'>
         """
         return cls._name_mappings()[every_xxx]
 

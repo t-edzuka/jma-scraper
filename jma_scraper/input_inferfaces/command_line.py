@@ -4,7 +4,6 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Dict, Literal, Optional
 
-from jma_scraper.core.location_spec import RecordInterval
 from pydantic import validate_arguments
 from typer import Option
 
@@ -17,7 +16,7 @@ from jma_scraper.core.location_instances import (
     IWATA_10Minutes_COLUMNS,
     SHIZUOKA_10Minutes_COLUMNS,
 )
-from jma_scraper.core.location_spec import Columns, Location
+from jma_scraper.core.location_spec import Columns, Location, RecordInterval
 from jma_scraper.core.url_formatter import QueryParamsForJma
 from jma_scraper.infrastracture.http_client import fetch_html
 
@@ -45,7 +44,7 @@ pattern = re.compile(r"\d{4}-\d{2}-\d{2}")
 def is_string_past_date(date_string: str) -> date:
     """
     >>> is_string_past_date("2022-01-01")
-    True
+    datetime.datetime(2022, 1, 1, 0, 0)
     """
     match = pattern.match(date_string)
     if not match:
@@ -83,7 +82,7 @@ def to_csv(
         block_no=location.location_no,
         prefecture_no=location.prefecture_no,
         record_interval=INTERVAL_MAPPINGS[every],
-        location_col_type=location.col_type
+        location_col_type=location.col_type,
     )
     url = qp.query_url
     print(f"Fetching this url: {url}")

@@ -3,9 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 from _pytest.fixtures import fixture
-
 from core.html_to_dataframe import pluck_table_from_html, read_html_table
-from core.location_instances import IWATA, HAMAMATSU
+from core.location_instances import HAMAMATSU, IWATA
 from core.location_spec import RecordInterval
 from core.url_formatter import QueryParamsForJma
 
@@ -26,5 +25,6 @@ def raw_multi_column_df(hamamatsu_html) -> pd.DataFrame:
 
 @fixture
 def hamamatsu_qp_every_10_minuets():
-    return QueryParamsForJma.from_location_spec(HAMAMATSU, date(2021, 1, 1),
-                                                RecordInterval.from_literal("every_10_minutes"))
+    return QueryParamsForJma.from_location_spec(
+        HAMAMATSU, date(2021, 1, 1), RecordInterval.from_literal("every_10_minutes")
+    )
