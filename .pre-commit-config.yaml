@@ -18,15 +18,12 @@ repos:
     rev: v3.2.2
     hooks:
       - id: pyupgrade
-        args:
-          - --py3-plus
-          - --keep-runtime-typing
+        args: ["--py310-plus", "--keep-runtime-typing"]
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.0.138
     hooks:
       - id: ruff
-        args:
-          - --fix
+        args: ["--fix"]
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
