@@ -18,6 +18,8 @@ certifi==2022.12.7
     # via
     #   httpcore
     #   httpx
+click==8.1.3
+    # via typer
 greenlet==2.0.1
     # via sqlalchemy
 h11==0.14.0
@@ -34,6 +36,8 @@ jmespath==1.0.1
     # via
     #   boto3
     #   botocore
+loguru==0.6.0
+    # via jma-scraper (pyproject.toml)
 lxml==4.9.2
     # via jma-scraper (pyproject.toml)
 numpy==1.24.1
@@ -72,6 +76,8 @@ sqlalchemy==1.4.41
 sqlalchemy2-stubs==0.0.2a31
     # via sqlmodel
 sqlmodel==0.0.8
+    # via jma-scraper (pyproject.toml)
+typer==0.7.0
     # via jma-scraper (pyproject.toml)
 typing-extensions==4.4.0
     # via
