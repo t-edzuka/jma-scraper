@@ -15,17 +15,17 @@ repos:
       # aws credentialsを誤ってコミットしない.
       - id: detect-aws-credentials
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.2
+    rev: v3.3.1
     hooks:
       - id: pyupgrade
         args: ["--py310-plus", "--keep-runtime-typing"]
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.0.138
+    rev: v0.0.222
     hooks:
       - id: ruff
         args: ["--fix"]
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.11.4
     hooks:
       - id: isort
         name: isort (python)
@@ -36,7 +36,7 @@ repos:
         name: isort (pyi)
         types: [ pyi ]
   - repo: https://github.com/psf/black
-    rev: 22.10.0
+    rev: 22.12.0
     hooks:
       - id: black
 
@@ -53,10 +53,6 @@ repos:
       - id: mypy
         name: mypy-local
         entry: mypy jma_scraper
-        args: [ "--ignore-missing-imports"]
+        args: ["--ignore-missing-imports"]
         language: system
         pass_filenames: false
-
-ci:
-  autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
-  autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate
